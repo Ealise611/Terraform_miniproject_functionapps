@@ -2,7 +2,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~> 3.0"
     }
   }
@@ -27,8 +27,8 @@ resource "azurerm_resource_group" "rg" {
 
 # Create a network security group
 resource "azurerm_network_security_group" "NSG" {
-  name     = "functionapps-security-group"
-  location = azurerm_resource_group.rg.location
+  name                = "functionapps-security-group"
+  location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
 
