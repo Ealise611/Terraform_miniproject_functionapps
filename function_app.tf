@@ -52,7 +52,7 @@ resource "azurerm_windows_function_app" "func_app" {
 
     # Used by your C# Function code
     KEYVAULT_URI = azurerm_key_vault.kv.vault_uri
-    SECRET_NAME  = "projectsecret"
+    SECRET_NAME  = azurerm_key_vault_secret.demo.name
   }
 }
 
