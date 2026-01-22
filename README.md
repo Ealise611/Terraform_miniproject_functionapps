@@ -79,6 +79,7 @@ This project follows enterprise best practices:
 -Project Structure
 
 📁 Project Structure
+```text
 mini_azure_project_functionapps/
 │
 ├── main.tf                # Resource Group, VNet, Subnet, provider config
