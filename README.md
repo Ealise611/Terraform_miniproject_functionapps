@@ -95,7 +95,7 @@ mini_azure_project_functionapps/
         ├── GetValueAPI.csproj
         ├── host.json
         └── local.settings.json
-
+```
 > Terraform commands are run from the repository root.  
 > Azure Function commands (`dotnet`, `func`) are run from the folder containing `GetValueAPI.csproj`.
 
