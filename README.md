@@ -18,14 +18,14 @@ It is designed as a **beginner-friendly, real-world example** for people learnin
 
 Using Terraform, this project provisions the following Azure resources:
 
-- ✅ Resource Group  
-- ✅ Virtual Network (VNet)  
-- ✅ Subnet  
-- ✅ Azure Key Vault (RBAC enabled)  
-- ✅ A Key Vault secret  
-- ✅ Azure Function App (Windows, .NET isolated)  
-- ✅ Storage Account (required by Function App)  
-- ✅ Application Insights  
+✅ Resource Group  
+✅ Virtual Network (VNet)  
+✅ Subnet  
+✅ Azure Key Vault (RBAC enabled)  
+✅ A Key Vault secret  
+✅ Azure Function App (Windows, .NET isolated)  
+✅ Storage Account (required by Function App)  
+✅ Application Insights  
 
 The Azure Function App exposes a simple HTTP API that:
 
