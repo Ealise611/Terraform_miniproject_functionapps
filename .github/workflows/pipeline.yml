@@ -37,7 +37,7 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -out=tfplan
+      run: terraform plan -out=tfplan.tfplan
 
     - name: Terraform show plan
       run: |
@@ -49,7 +49,7 @@ jobs:
       with:
         name: terraform-plan
         path: |
-          tfplan
+          tfplan.tfplan
           plan.json
           plan-summary.txt
   deploy:
@@ -77,4 +77,4 @@ jobs:
         name: terraform-plan
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan
+      run: terraform apply -auto-approve tfplan.tfplan
