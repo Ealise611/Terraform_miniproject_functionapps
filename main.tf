@@ -6,11 +6,11 @@ terraform {
       version = "~> 3.0"
     }
   }
-    backend "azurerm" {
-      resource_group_name  = "az-p-lrn-sbx-rgr-cicd-001"
-      storage_account_name = "azplrnsbxstocicd001"
-      container_name       = "azplrnsbxstotfstate001"
-      key                  = "terraform.tfstate"
+  backend "azurerm" {
+    resource_group_name  = "az-p-lrn-sbx-rgr-cicd-001"
+    storage_account_name = "azplrnsbxstocicd001"
+    container_name       = "azplrnsbxstotfstate001"
+    key                  = "terraform.tfstate"
   }
 }
 
