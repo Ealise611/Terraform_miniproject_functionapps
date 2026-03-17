@@ -6,25 +6,75 @@ on:
   push:
     branches:
     - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   build:
     # Github has both ubuntu-lastest or windows-latest. In this scenario, can use both, but Ubuntu is the best practice
     runs-on: ubuntu-latest
     steps:
+    #Steps to git clone your repo
     - name: Checkout repository
       uses: actions/checkout@v4
+
     - name: Azure Login
       uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v4
+
     - name: Terraform Init
       run: terraform init
-    - name: Terraform Format Checkout
-      run: terraform fmt -check
+
+    - name: Terraform Format Check
+      run: terraform fmt -check -recursive
+
     - name: Terraform Validate
       run: terraform validate
+
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -out=tfplan
+
+    - name: Terraform show plan
+      run: |
+        terraform show -json tfplan > plan.json
+        terraform show tfplan -no-color | tail -50 > plan.summary.txt
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: terraform-plan
+        path: |
+          tfplan
+          plan.json
+          plan-summary.txt
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v4
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: terraform-plan
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
