@@ -14,6 +14,8 @@ jobs:
   build:
     # Github has both ubuntu-lastest or windows-latest. In this scenario, can use both, but Ubuntu is the best practice
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_principal_id: ${{ secrets.AZURE_CREDENTIALS}}
     steps:
     #Steps to git clone your repo
     - name: Checkout repository
