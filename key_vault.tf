@@ -16,8 +16,4 @@ resource "azurerm_key_vault_secret" "demo" {
   name         = "demo-secret"
   value        = "hello-from-terraform"
   key_vault_id = azurerm_key_vault.kv.id
-
-  depends_on = [
-    azurerm_role_assignment.kv_secrets_officer_current_user
-  ]
 }
