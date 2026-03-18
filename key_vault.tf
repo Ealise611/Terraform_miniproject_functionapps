@@ -12,12 +12,6 @@ resource "azurerm_key_vault" "kv" {
   enable_rbac_authorization = true
 }
 
-resource "azurerm_role_assignment" "kv_secrets_officer_current_user" {
-  scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = var.github_actions_principal_id
-}
-
 resource "azurerm_key_vault_secret" "demo" {
   name         = "demo-secret"
   value        = "hello-from-terraform"
