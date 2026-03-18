@@ -78,3 +78,5 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve tfplan.tfplan
+      env: 
+        TF_VAR_github_actions_principal_id: ${{ secrets.ARM_PRINCIPAL_ID}}

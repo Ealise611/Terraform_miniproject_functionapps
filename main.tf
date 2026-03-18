@@ -15,6 +15,10 @@ terraform {
   }
 }
 
+variable "github_actions_principal_id" {
+    type = string
+}
+
 provider "azurerm" {
   features {
     key_vault {

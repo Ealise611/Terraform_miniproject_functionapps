@@ -15,7 +15,7 @@ resource "azurerm_key_vault" "kv" {
 resource "azurerm_role_assignment" "kv_secrets_officer_current_user" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
+  principal_id         = var.github_actions_principal_id
 }
 
 resource "azurerm_key_vault_secret" "demo" {
