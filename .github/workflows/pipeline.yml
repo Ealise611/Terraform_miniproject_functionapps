@@ -28,13 +28,13 @@ jobs:
       uses: hashicorp/setup-terraform@v4
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform -chdir=terraform init
 
     - name: Terraform Format Check
       run: terraform fmt -recursive
 
     - name: Terraform Validate
-      run: terraform validate -recursive
+      run: terraform -chdir=terraform validate
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan.tfplan
@@ -69,7 +69,7 @@ jobs:
       uses: hashicorp/setup-terraform@v4
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform -chdir=terraform init
 
     - name: Download Artifacts
       uses: actions/download-artifact@v4
