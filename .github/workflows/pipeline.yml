@@ -34,7 +34,7 @@ jobs:
       run: terraform fmt -recursive
 
     - name: Terraform Validate
-      run: terraform validate
+      run: terraform validate -recursive
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan.tfplan
@@ -78,5 +78,3 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve tfplan.tfplan
-      env: 
-        TF_VAR_github_actions_principal_id: ${{ secrets.ARM_PRINCIPAL_ID}}
