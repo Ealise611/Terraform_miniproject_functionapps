@@ -19,7 +19,7 @@ variable "vnet_address_space" {
 variable "subnet_name" {
   description = "a name of subnet inside the vNet."
   type        = string
-  default     = "subnet 1"
+  default     = "subnet1"
 }
 
 variable "subnet_address_prefix" {
