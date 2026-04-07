@@ -46,10 +46,10 @@ variable "key_vault_soft_delete_retention_days" {
   default     = 7
 }
 
-variable "storage_account_tier" {
-    description = "storage account tier"
+variable "azurerm_service_plan_sku_name" {
+    description = "service plan sku name"
     type = string
-    default = Standard
+    default = "Y1"
 }
 
 variable "storage_account_replication_type" {
