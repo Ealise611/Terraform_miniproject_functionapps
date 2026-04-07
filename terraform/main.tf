@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "azurerm" {
-    subscription_id = "9ffff625-f8ac-424b-937a-b2a0258cbd79"
+    subscription_id      = "9ffff625-f8ac-424b-937a-b2a0258cbd79"
     resource_group_name  = "az-p-lrn-sbx-rgr-cicd-001"
     storage_account_name = "azplrnsbxstocicd001"
     container_name       = "azplrnsbxstotfstate001"
@@ -28,8 +28,8 @@ data "azurerm_client_config" "current" {}
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
-  name     = "RG-functionapps"
-  location = "australiaeast"
+  name     = var.resource_group_name
+  location = var.location
 }
 
 # Create a network security group
@@ -43,12 +43,12 @@ resource "azurerm_virtual_network" "Vnet" {
   name                = "functionapps-network"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  address_space       = ["10.0.0.0/16"]
+  address_space       = var.vnet_address_space
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                 = "sbnet1"
+  name                 = var.subnet_name
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.Vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
+  address_prefixes     = var.subnet_address_prefix
 }

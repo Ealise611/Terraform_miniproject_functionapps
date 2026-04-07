@@ -14,7 +14,7 @@ resource "azurerm_storage_account" "func_sa" {
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = var.storage_account_replication_type
 }
 
 
@@ -26,7 +26,7 @@ resource "azurerm_service_plan" "func_plan" {
   location            = azurerm_resource_group.rg.location
 
   os_type  = "Windows"
-  sku_name = "Y1"
+  sku_name = var.azurerm_service_plan_sku_name
 }
 
 
