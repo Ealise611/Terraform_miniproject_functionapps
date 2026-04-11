@@ -1,14 +1,15 @@
-# This is my CI pipeline
-name: terraform-azure-function-ci
+# This is my dev pipeline
+name: terraform-azure-function-dev
 
-# trigger pipeline when code is push
+# trigger pipeline when code is push and pull from dev
 on:
-  push:
-    branches:
-    - main
   pull_request:
     branches:
-    - main
+    - dev
+  push:
+    branches:
+    - dev
+
 
 jobs:
   build:
@@ -40,23 +41,23 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -out=tfplan.tfplan
+      run: terraform plan -var-file="config/dev.tfvars" -out=dev-tfplan.tfplan
       env:
         TF_VAR_key_vault_secret_value: ${{ secrets.KEY_VAULT_SECRET_VALUE}}
 
     - name: Terraform show plan
       run: |
-        terraform show -json tfplan.tfplan > plan.json
-        terraform show tfplan.tfplan -no-color | tail -50 > plan-summary.txt
+        terraform show -json dev-tfplan.tfplan > dev-plan.json
+        terraform show dev-tfplan.tfplan -no-color | tail -50 > dev-plan-summary.txt
 # tfplan.tfplan gets created in terrform/
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: terraform-plan
         path: |
-          terraform/tfplan.tfplan
-          terraform/plan.json
-          terraform/plan-summary.txt
+          terraform/dev-tfplan.tfplan
+          terraform/dev-plan.json
+          terraform/dev-plan-summary.txt
   deploy:
     needs: build
     if: github.event_name == 'push'
@@ -87,6 +88,6 @@ jobs:
         path: ./terraform
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan.tfplan
+      run: terraform apply -auto-approve dev-tfplan.tfplan
       env:
         TF_VAR_key_vault_secret_value: ${{ secrets.KEY_VAULT_SECRET_VALUE}}
