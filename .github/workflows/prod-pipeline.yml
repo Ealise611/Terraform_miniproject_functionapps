@@ -1,0 +1,94 @@
+# This is my prod pipeline
+name: terraform-azure-function-prod
+
+# trigger pipeline when code is push and pull from dev
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+
+
+jobs:
+  build:
+    # Github has both ubuntu-lastest or windows-latest. In this scenario, can use both, but Ubuntu is the best practice
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            working-directory: ./terraform
+    steps:
+    #Steps to git clone your repo
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v4
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format Check
+      run: terraform fmt -recursive
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -var-file="config/prod.tfvars" -out=prod-tfplan.tfplan
+      env:
+        TF_VAR_key_vault_secret_value: ${{ secrets.KEY_VAULT_SECRET_VALUE}}
+
+    - name: Terraform show plan
+      run: |
+        terraform show -json prod-tfplan.tfplan > prod-plan.json
+        terraform show prod-tfplan.tfplan -no-color | tail -50 > prod-plan-summary.txt
+# tfplan.tfplan gets created in terrform/
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: terraform-plan
+        path: |
+          terraform/prod-tfplan.tfplan
+          terraform/prod-plan.json
+          terraform/prod-plan-summary.txt
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    environment: production
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            working-directory: ./terraform
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v4
+
+    - name: Terraform Init
+      run: terraform init
+
+# need to assign path or else it will download artifacts to root. working directory set to /terraform
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: terraform-plan
+        path: ./terraform
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve prod-tfplan.tfplan
+      env:
+        TF_VAR_key_vault_secret_value: ${{ secrets.KEY_VAULT_SECRET_VALUE}}
