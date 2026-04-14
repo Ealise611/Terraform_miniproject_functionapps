@@ -32,7 +32,7 @@ jobs:
       uses: hashicorp/setup-terraform@v4
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="config/dev.backend.hcl"
 
     - name: Terraform Format Check
       run: terraform fmt -recursive
@@ -78,7 +78,7 @@ jobs:
       uses: hashicorp/setup-terraform@v4
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="config/dev.backend.hcl"
 
 # need to assign path or else it will download artifacts to root. working directory set to /terraform
     - name: Download Artifacts
